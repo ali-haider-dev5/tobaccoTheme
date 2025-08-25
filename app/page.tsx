@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Hero from "@/components/Hero"
 import TobaccoCarousel from "@/components/Carousel";
 import TobaccoCards from "@/components/Cards";

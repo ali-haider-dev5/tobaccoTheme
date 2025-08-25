@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants, type Transition } from "framer-motion";
 import Image from "next/image";
 
 const headingText = "Use Crafting\nTradition";
@@ -10,14 +10,29 @@ const containerVariants = {
   visible: { transition: { staggerChildren: 0.05 } },
 };
 
-const letterVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
-const paragraphVariant = {
+const paragraphVariant: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { delay: 1.5, duration: 0.8, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 1.5,
+      duration: 0.8,
+      ease: "easeOut" satisfies Transition["ease"], // ✅ valid easing
+    },
+  },
+};
+const EASE: Transition["ease"] = [0.22, 1, 0.36, 1];
+const letterVariants: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: EASE,
+    },
+  },
 };
 
 const Hero = () => {
@@ -73,8 +88,14 @@ const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            {headingText.split("").map((char, i) =>
-              char === "\n" ? <br key={i} /> : <motion.span key={i} variants={letterVariants}>{char}</motion.span>
+            {[...headingText].map((char, i) =>
+              char === "\n" ? (
+                <br key={`br-${i}`} />
+              ) : (
+                <motion.span key={`ch-${i}`} variants={letterVariants}>
+                  {char}
+                </motion.span>
+              )
             )}
           </motion.h1>
 
@@ -88,9 +109,9 @@ const Hero = () => {
               mb-6 sm:mb-8
             "
           >
-            Where traditional artistry meets contemporary design. Every piece tells
-            a story of dedication, precision, and time-honored techniques passed
-            down through generations.
+            Where traditional artistry meets contemporary design. Every piece
+            tells a story of dedication, precision, and time-honored techniques
+            passed down through generations.
           </motion.p>
 
           <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center space-y-3 sm:space-y-0 sm:space-x-4">
@@ -103,16 +124,16 @@ const Hero = () => {
           </div>
         </div>
 
-       <div className="flex justify-end items-end mt-8 md:mt-0 md:flex-1">
-        <Image
-          src="/images/tobacco-gif-placeholder.gif"
-          alt="Tobacco-themed GIF"
-          width={500}
-          height={500}
-          className="rounded-lg w-[180px] sm:w-[260px] md:w-[360px] lg:w-[420px] h-auto object-contain"
-          unoptimized
-        />
-      </div>
+        <div className="flex justify-end items-end mt-8 md:mt-0 md:flex-1">
+          <Image
+            src="/images/tobacco-gif-placeholder.gif"
+            alt="Tobacco-themed GIF"
+            width={500}
+            height={500}
+            className="rounded-lg w-[180px] sm:w-[260px] md:w-[360px] lg:w-[420px] h-auto object-contain"
+            unoptimized
+          />
+        </div>
       </div>
     </section>
   );
